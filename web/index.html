@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AMP Evidence Chain Explorer</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        body { background: #0d1117; color: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; margin: 0; padding: 40px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; color: #58a6ff; font-weight: 300; letter-spacing: 2px; }
+        .status { text-align: center; margin-bottom: 40px; color: #8b949e; }
+        .chain { display: flex; flex-direction: column; gap: 20px; position: relative; }
+        .chain::before { content: ''; position: absolute; top: 0; bottom: 0; left: 28px; width: 2px; background: #30363d; z-index: 0; }
+        .event { display: flex; align-items: flex-start; gap: 20px; z-index: 1; }
+        .dot { width: 20px; height: 20px; border-radius: 50%; background: #238636; border: 4px solid #0d1117; margin-top: 15px; box-shadow: 0 0 10px #238636; flex-shrink: 0; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 20px; flex-grow: 1; transition: transform 0.2s; }
+        .card:hover { transform: translateX(5px); border-color: #58a6ff; }
+        .header { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; }
+        .action { color: #d2a8ff; }
+        .time { color: #8b949e; font-size: 0.9em; }
+        .hash { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; color: #7ee787; font-size: 0.85em; word-break: break-all; margin-top: 10px; background: #0d1117; padding: 8px; border-radius: 4px; }
+        .btn { display: block; margin: 0 auto 20px; background: #238636; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 16px; }
+        .btn:hover { background: #2ea043; }
+    </style>
+</head>
+<body>
+    <div id="app" class="container">
+        <h1>AMP Evidence Chain</h1>
+        <div class="status">Immutable Audit Trail Explorer</div>
+        
+        <button class="btn" @click="fetchEvents">Fetch / Refresh Chain</button>
+
+        <div class="chain">
+            <div class="event" v-for="(ev, index) in events" :key="ev.id">
+                <div class="dot"></div>
+                <div class="card">
+                    <div class="header">
+                        <span class="action">#{{ ev.seq }} {{ ev.action }}</span>
+                        <span class="time">{{ formatTime(ev.at) }}</span>
+                    </div>
+                    <div>Actor: <strong>{{ ev.actor }}</strong> | Target: {{ ev.target }}</div>
+                    <div class="hash">prev: {{ ev.prevHash }}</div>
+                    <div class="hash">hash: {{ ev.hash }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref, onMounted } = Vue;
+        createApp({
+            setup() {
+                const events = ref([]);
+                
+                const fetchEvents = async () => {
+                    try {
+                        const res = await fetch('http://127.0.0.1:7717/v1/events');
+                        const data = await res.json();
+                        // 倒序展示，最新的在最上面
+                        events.value = data.reverse();
+                    } catch (e) {
+                        alert('Error fetching events. Is the daemon running?');
+                    }
+                };
+
+                const formatTime = (ms) => new Date(ms).toLocaleString();
+
+                onMounted(fetchEvents);
+                return { events, fetchEvents, formatTime };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
