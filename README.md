@@ -1,4 +1,4 @@
-[![Conformance Suite](https://github.com/doujiaozh/amp/actions/workflows/test.yml/badge.svg)](https://github.com/doujiaozh/amp/actions/workflows/test.yml)
+[![Conformance Suite](https://github.com/doujiaozh/amp/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/doujiaozh/amp/actions/workflows/test.yml)
 
 > **Naming note**: AMP here stands for **Attestation Memory Protocol**.
 > It is **not** the same as "Agent Memory Protocol" (a persistent
