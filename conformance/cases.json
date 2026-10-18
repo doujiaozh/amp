@@ -1,0 +1,40 @@
+[
+  { "name": "write without attestation rejected",
+    "request": { "method": "POST", "path": "/v1/memories",
+      "body": { "appId": "app-a", "scope": "work", "content": "x" } },
+    "expect": { "status": 400 } },
+
+  { "name": "grant work scope to app-a",
+    "request": { "method": "POST", "path": "/v1/grants",
+      "body": { "appId": "app-a", "scopes": ["work"], "ttlMs": 600000 } },
+    "save": { "grantId": "body.id" },
+    "expect": { "status": 201 } },
+
+  { "name": "write with full attestation succeeds",
+    "request": { "method": "POST", "path": "/v1/memories",
+      "body": { "appId": "app-a", "scope": "work", "content": "Project Orion ships Q1",
+        "attestation": { "source": "user", "method": "user typed",
+          "confidence": 0.95, "limitations": [], "capturedAt": 1700000000000 } } },
+    "save": { "memoryId": "body.id" },
+    "expect": { "status": 201 } },
+
+  { "name": "read without grant forbidden",
+    "request": { "method": "GET", "path": "/v1/memories?appId=app-b&scope=work" },
+    "expect": { "status": 403 } },
+
+  { "name": "read with grant returns attestation",
+    "request": { "method": "GET", "path": "/v1/memories?appId=app-a&scope=work&q=Orion" },
+    "expect": { "status": 200, "bodyArrayFirstHas": ["attestation", "contentHash"] } },
+
+  { "name": "revoke grant",
+    "request": { "method": "DELETE", "path": "/v1/grants/{{grantId}}" },
+    "expect": { "status": 200 } },
+
+  { "name": "read after revoke forbidden",
+    "request": { "method": "GET", "path": "/v1/memories?appId=app-a&scope=work" },
+    "expect": { "status": 403 } },
+
+  { "name": "verify chain ok",
+    "request": { "method": "GET", "path": "/v1/verify" },
+    "expect": { "status": 200, "body": { "ok": true } } }
+]
