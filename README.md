@@ -50,3 +50,21 @@ Sync, encryption, cross-device, UI. See rfcs/.
 
 ## License
 Apache-2.0
+
+
+## MCP Integration (Cursor / Claude Desktop)
+
+Because AMP is just a local HTTP daemon, you can easily wrap it as an MCP (Model Context Protocol) tool. Add this to your MCP config:
+
+```json
+{
+  "mcpServers": {
+    "amp": {
+      "command": "node",
+      "args": ["/absolute/path/to/amp/reference/daemon.js"]
+    }
+  }
+}
+```
+
+Now your AI agent can securely write memories through AMP, and every operation will be verifiable at `http://127.0.0.1:7717/v1/verify`.
