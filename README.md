@@ -1,3 +1,10 @@
+> **Naming note**: AMP here stands for **Attestation Memory Protocol**.
+> It is **not** the same as "Agent Memory Protocol" (a persistent
+> cross-session memory layer). Our focus is **evidence orchestration**:
+> every read/write carries verifiable attestation and an immutable
+> hash-chained audit trail. We do not store or rank memories; we sit
+> in front of any memory store and make access auditable.
+
 # AMP - Attestation Memory Protocol
 
 Your AI's memory should come with a receipt.
