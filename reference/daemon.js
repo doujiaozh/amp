@@ -1,11 +1,13 @@
 const http = require("http");
+const { db, saveData } = require("./store");
+
 const crypto = require("crypto");
 
 const PORT = 7717;
 const HOST = "127.0.0.1";
 const ENCRYPTION_KEY = crypto.scryptSync("amp-secret-v02", "salt", 32);
 
-const db = { memories: new Map(), grants: new Map(), events: [] };
+
 const sha = (s) => crypto.createHash("sha256").update(s).digest("hex");
 const now = () => Date.now();
 const GENESIS = "GENESIS";
@@ -42,6 +44,8 @@ function appendEvent(actor, action, target, payload) {
   const ev = { seq, id: uuid(), actor, action, target, payloadHash: sha(JSON.stringify(payload)), at: now(), prevHash };
   ev.hash = sha([ev.seq, ev.id, ev.actor, ev.action, ev.target, ev.payloadHash, ev.at, ev.prevHash].join("|"));
   db.events.push(ev);
+
+  saveData(db);
   return ev;
 }
 
