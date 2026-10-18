@@ -26,15 +26,15 @@ jobs:
     - name: Test Node.js implementation
       run: |
         node reference/daemon.js &
-        DAEMON_PID=$!
         sleep 2
         node conformance/run.js
-        kill $DAEMON_PID
+        pkill -f "node reference/daemon.js" || true
+        sleep 1
 
     - name: Test Go implementation
       run: |
-        go run reference/daemon.go &
-        DAEMON_PID=$!
+        go build -o reference/daemon_bin reference/daemon.go
+        ./reference/daemon_bin &
         sleep 3
         node conformance/run.js
-        kill $DAEMON_PID
+        pkill -f "reference/daemon_bin" || true
