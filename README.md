@@ -41,7 +41,7 @@ Deletion produces a tombstone that keeps the content hash as proof.
     http://127.0.0.1:7717/v1/events
 
 ## Spec
-SPEC.md - v0.1 frozen for MVP.
+SPEC.md - v0.2 stable. Includes AES-256-GCM encryption and cross-device sync APIs.
 
 ## Compatibility
 Any implementation passing conformance/run.js is AMP-compatible.

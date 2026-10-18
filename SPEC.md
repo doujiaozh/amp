@@ -1,4 +1,4 @@
-# AMP — Attestation Memory Protocol v0.1
+# AMP — Attestation Memory Protocol v0.2
 
 Status: DRAFT (MVP frozen)
 License: Apache-2.0
