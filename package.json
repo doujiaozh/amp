@@ -1,0 +1,18 @@
+{
+  "name": "amp",
+  "version": "1.0.0",
+  "description": "[![Conformance Suite](https://github.com/doujiaozh/amp/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/doujiaozh/amp/actions/workflows/test.yml)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1"
+  }
+}
